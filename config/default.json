@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://tantutu:Bi6a2RwTzrxyqjJ@cluster0.o36sl.mongodb.net/contactkeeper?retryWrites=true&w=majority",
+  "jwtSecret": "adsdfgfgertcvcvb"
+}
