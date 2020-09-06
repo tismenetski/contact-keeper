@@ -3,9 +3,17 @@ import PropTypes from 'prop-types';
 import ContactContext from '../../context/contact/contactContext';
 
 const ContactItem = ({ contact }) => {
-  const { id, name, email, phone, type } = contact;
+  const contactContext = useContext(ContactContext); // Init any context to access state & functions
 
-  const contactContext = useContext(ContactContext);
+  const { deleteContact, setCurrent, clearCurrent } = contactContext; // Destructure functions from contactContext
+
+  const { id, name, email, phone, type } = contact; // Destructure contact
+
+  const onDelete = () => {
+    // when we click delete contact button we approach the contactContext,where a function deleteContact(id) takes an id and deletes a contact
+    deleteContact(id);
+    clearCurrent(); // Deleting a contact, removing the current contact from the current state
+  };
 
   return (
     <div className="card bg-light">
@@ -35,8 +43,15 @@ const ContactItem = ({ contact }) => {
         )}
       </ul>
       <p>
-        <button className="btn btn-dark btn-sm">Edit</button>
-        <button className="btn btn-danger btn-sm">Delete</button>
+        <button
+          className="btn btn-dark btn-sm"
+          onClick={() => setCurrent(contact)}
+        >
+          Edit
+        </button>
+        <button className="btn btn-danger btn-sm" onClick={onDelete}>
+          Delete
+        </button>
       </p>
     </div>
   );
