@@ -7,11 +7,11 @@ const ContactItem = ({ contact }) => {
 
   const { deleteContact, setCurrent, clearCurrent } = contactContext; // Destructure functions from contactContext
 
-  const { id, name, email, phone, type } = contact; // Destructure contact
+  const { _id, name, email, phone, type } = contact; // Destructure contact
 
   const onDelete = () => {
     // when we click delete contact button we approach the contactContext,where a function deleteContact(id) takes an id and deletes a contact
-    deleteContact(id);
+    deleteContact(_id);
     clearCurrent(); // Deleting a contact, removing the current contact from the current state
   };
 

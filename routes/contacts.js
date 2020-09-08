@@ -66,14 +66,57 @@ router.post(
 //  @desc   Update contact
 //  @access Private
 router.put('/:id', auth, async (req, res) => {
-  res.send('Update contact');
+  const { name, email, phone, type } = req.body;
+
+  //Contact fields
+  const contactFields = {};
+  if (name) contactFields.name = name;
+  if (email) contactFields.email = email;
+  if (phone) contactFields.phone = phone;
+  if (type) contactFields.type = type;
+
+  try {
+    let contact = await Contact.findById(req.params.id);
+
+    if (!contact) {
+      return res.status(404).json({ msg: 'No contact found' });
+    }
+    if (req.user.id !== contact.user.toString()) {
+      return res.status(401).json({ msg: 'Not Allowed to delete message' });
+    }
+
+    contact = await Contact.findByIdAndUpdate(req.params.id, {
+      $set: contactFields,
+      new: true,
+    });
+
+    res.json(contact);
+  } catch (error) {
+    console.error(er.message);
+    res.status(500).send('Server Error');
+  }
 });
 
 //  @router DELETE /api/contacts/:id
 //  @desc   Delete contact
 //  @access Private
 router.delete('/:id', auth, async (req, res) => {
-  res.send('Delete contact');
+  try {
+    let contact = await Contact.findById(req.params.id);
+
+    if (!contact) {
+      return res.status(404).json({ msg: 'No contact found' });
+    }
+    if (req.user.id !== contact.user.toString()) {
+      return res.status(401).json({ msg: 'Not Allowed to delete message' });
+    }
+
+    await Contact.findByIdAndRemove(req.params.id);
+    res.json({ msg: 'Contact removed' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
 });
 
 module.exports = router;
